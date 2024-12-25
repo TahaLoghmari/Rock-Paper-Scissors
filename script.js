@@ -1,6 +1,6 @@
-let humanScore = 0,
-  ComputerScore = 0;
-
+let HumanScore = document.querySelector(".HumanScoreDisplay") ,
+ ComputerScore = document.querySelector(".ComputerScoreDisplay") ,
+ Winner = document.querySelector(".Winner"); 
 function getComputerChoice() {
   let ChoiceNum = Math.random();
   let Choice;
@@ -9,26 +9,40 @@ function getComputerChoice() {
   else Choice = "Scissors";
   return Choice.toLowerCase();
 }
-function getHumanChoice() {
-  const myChoice = prompt("Pick a Choice", "");
-  return myChoice.toLowerCase();
-}
 function playRound(HumanChoice, ComputerChoice) {
-  console.log(HumanChoice, ComputerChoice);
   if (
     (HumanChoice == "paper" && ComputerChoice == "rock") ||
     (HumanChoice == "rock" && ComputerChoice == "scissors") ||
     (HumanChoice == "scissors" && ComputerChoice == "paper")
   ) {
-    humanScore++;
-    console.log("human won this round");
+    HumanScore.textContent = parseInt(HumanScore.textContent,10) + 1 ; 
   } else {
-    console.log("computer won this round");
-    ComputerScore++;
+    ComputerScore.textContent = parseInt(ComputerScore.textContent,10) + 1 ; 
   }
+  if ( parseInt(HumanScore.textContent,10) == 5 )
+    {
+      Winner.textContent = "Human Wins " ; 
+      HumanScore.textContent = 0 ; ComputerScore.textContent = 0 ;
+      disableButtons(); 
+    }
+    else if ( parseInt(ComputerScore.textContent,10) == 5)
+    {
+      Winner.textContent = "Computer Wins " ; 
+      HumanScore.textContent = 0 ; ComputerScore.textContent = 0 ;
+      disableButtons(); 
+    }
 }
-function playGame() {
-  for (let i = 0; i < 5; ++i) playRound(getHumanChoice(), getComputerChoice());
-  return humanScore >= ComputerScore ? "Human Wins" : "Computer Wins";
+let btns = document.querySelectorAll(".button") ; 
+btns.forEach( (btn) => 
+{
+  btn.addEventListener("click", (e) => 
+  {
+    playRound(e.target.innerText.toLowerCase(),getComputerChoice());
+  });
+});
+function disableButtons() {
+  let btns = document.querySelectorAll(".button");
+  btns.forEach((btn) => {
+    btn.disabled = true;
+  });
 }
-console.log(playGame());
